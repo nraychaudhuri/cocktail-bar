@@ -54,7 +54,7 @@ Software: Java SDK 1.8
   - Download SBT sources and docs
   - Java 1.8 as the Project SDK
 
-## Setup an IDE (IntelliJ IDEA)
+## Setup an IDE (Eclipse)
 
 - You can download the prepackaged and preconfigured Scala IDE for your platform from scala-ide.org/download/sdk.html
 - Go to your cocktail-var activator console and run the command eclipse with-source=true
