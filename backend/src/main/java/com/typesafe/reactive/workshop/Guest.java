@@ -5,9 +5,11 @@ import akka.actor.Props;
 import akka.actor.ActorRef;
 import akka.japi.pf.ReceiveBuilder;
 import scala.PartialFunction;
+import scala.concurrent.duration.FiniteDuration;
 import scala.runtime.BoxedUnit;
 
 import java.io.Serializable;
+import java.util.concurrent.TimeUnit;
 
 public class Guest extends AbstractLoggingActor {
 
@@ -19,7 +21,7 @@ public class Guest extends AbstractLoggingActor {
 
 
   public static class DrinkFinished implements Serializable {
-    public static final DrinkFinished df = new DrinkFinished();
+    public static final DrinkFinished Instance = new DrinkFinished();
     private DrinkFinished() {}
 
   }
@@ -42,8 +44,17 @@ public class Guest extends AbstractLoggingActor {
             .match(Waiter.DrinkServered.class, ds -> {
               drinkCount += 1;
               log().info("Enjoying my {}. yummy {}!", drinkCount, favoriteDrink);
+              scheduleCoffeeFinished();
             })
             .match(DrinkFinished.class, d -> waiter.tell(new Waiter.ServeDrink(favoriteDrink), self()))
             .build();
+  }
+
+
+  private void scheduleCoffeeFinished(){
+    context().system()
+            .scheduler()
+            .scheduleOnce(new FiniteDuration(2, TimeUnit.SECONDS), self(),
+                    DrinkFinished.Instance, context().dispatcher(), self());
   }
 }
