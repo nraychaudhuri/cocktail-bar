@@ -21,7 +21,6 @@ lazy val commonSettings = Seq(
   EclipseKeys.eclipseOutput := Some(".target"),
   EclipseKeys.withSource := true,
   EclipseKeys.skipParents in ThisBuild := true,
-  EclipseKeys.skipProject := true,
   parallelExecution in Test := false,
   logBuffered in Test := false,
   parallelExecution in ThisBuild := false

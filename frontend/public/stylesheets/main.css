@@ -1,0 +1,20 @@
+.info {
+    background: #7FB6CC;
+    color: #fff;
+    padding: 5px;
+}
+
+.debug {
+    background: #609954;
+    color: #fff;
+    padding: 5px;
+}
+
+.other {
+    background: #993830;
+    color: #fff;
+    padding: 5px;
+}
+
+
+

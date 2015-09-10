@@ -2,8 +2,13 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
+#Streaming ticks examples
+GET        /ticks                   controllers.StreamingLogEvents.viewer
+GET        /streaming/events        controllers.StreamingLogEvents.logs
+
+
 # Home page
-GET     /                           controllers.Application.index
+POST     /partyOrder                controllers.PartyOrders.placeOrder
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
