@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.IntStream;
 
 public class CocktailBarApp implements Terminal{
 
@@ -91,6 +92,9 @@ public class CocktailBarApp implements Terminal{
   }
 
   protected void createGuest(int count, Drink drink, int maxDrinkCount){
+    IntStream.range(0, count).forEach( c -> {
+      bar.tell(CocktailBar.CreateGuest.Instance, ActorRef.noSender());
+    });
   }
 
   protected void getStatus(){
