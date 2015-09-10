@@ -1,8 +1,7 @@
 package com.typesafe.reactive.workshop;
 
-import akka.actor.AbstractLoggingActor;
-import akka.actor.ActorRef;
-import akka.actor.Props;
+import akka.actor.*;
+import akka.japi.pf.DeciderBuilder;
 import akka.japi.pf.ReceiveBuilder;
 import scala.PartialFunction;
 import scala.runtime.BoxedUnit;
@@ -22,11 +21,23 @@ public class CocktailBar extends AbstractLoggingActor {
   }
 
 
+  @Override
+  public SupervisorStrategy supervisorStrategy() {
+    return new OneForOneStrategy(
+            DeciderBuilder
+                    .match(Guest.DrunkException.class, c -> {
+                      return SupervisorStrategy.stop();
+                    })
+                    .build());
+  }
+
   public static final class CreateGuest implements Serializable {
     public final Drink drink;
+    private final int maxDrinkCount;
 
-    public CreateGuest(Drink drink) {
+    public CreateGuest(Drink drink, int maxDrinkCount) {
       this.drink = drink;
+      this.maxDrinkCount = maxDrinkCount;
     }
 
   }
@@ -43,7 +54,7 @@ public class CocktailBar extends AbstractLoggingActor {
   }
 
   private ActorRef createGuest(CreateGuest createGuest) {
-    return getContext().actorOf(Guest.props(waiter, createGuest.drink));
+    return getContext().actorOf(Guest.props(waiter, createGuest.drink, createGuest.maxDrinkCount));
   }
 
 
