@@ -11,14 +11,23 @@ import java.io.Serializable;
 
 public class CocktailBar extends AbstractLoggingActor {
 
+  private ActorRef waiter = createWaiter();
+
+  private ActorRef createWaiter() {
+    return getContext().actorOf(Waiter.props(), "waiter");
+  }
+
   public static Props props() {
     return Props.create(CocktailBar.class, () -> new CocktailBar());
   }
 
 
   public static final class CreateGuest implements Serializable {
-    public static final CreateGuest Instance = new CreateGuest();
-    private CreateGuest() {}
+    public final Drink drink;
+
+    public CreateGuest(Drink drink) {
+      this.drink = drink;
+    }
 
   }
 
@@ -34,7 +43,7 @@ public class CocktailBar extends AbstractLoggingActor {
   }
 
   private ActorRef createGuest(CreateGuest createGuest) {
-    return getContext().actorOf(Guest.props());
+    return getContext().actorOf(Guest.props(waiter, createGuest.drink));
   }
 
 
